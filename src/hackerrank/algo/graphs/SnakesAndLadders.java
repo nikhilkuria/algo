@@ -39,13 +39,14 @@ public class SnakesAndLadders {
 	}
 	
 	public void addSnake(int from, int to){
+		boardGraph[from].clear();
 		addShortCircuitEdge(from, to);
 	}
 	
 	private void addShortCircuitEdge(int from, int to) {
 		for (int step = 1; step < 7; step++) {
 			int stepIndex = from-step;
-			if(stepIndex>0){
+			if(stepIndex>=0){
 				boardGraph[stepIndex].add(to);
 			}else{
 				return;
@@ -75,11 +76,15 @@ public class SnakesAndLadders {
 	}
 
 	public void printOut() {
-		int stepCount = 0;
-		int currentPostion = 99;
-		while(pathTo[99]!=0){
-			currentPostion = pathTo[currentPostion];
+		int stepCount = 1;
+		int currentPosition = 99;
+		while(pathTo[currentPosition]!=0){
+			currentPosition = pathTo[currentPosition];
 			stepCount++;
+			if(currentPosition==-1){
+				stepCount = -1;
+				break;
+			}
 		}
 		System.out.println(stepCount);
 	}
