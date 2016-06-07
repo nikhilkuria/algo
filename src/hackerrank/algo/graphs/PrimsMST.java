@@ -65,12 +65,11 @@ public class PrimsMST {
 				visited[newVertex] = true;
 				minimalTree.add(edge);
 				minimalTreeLength+=edge.getWeight();
-				int vertex = edge.getOtherVertex(startIndex);
-				minimumPathTo[vertex]=edge;
-				for (Edge nextEdge : graph[vertex]) {
-					int nextVertex = nextEdge.getOtherVertex(vertex);
+				minimumPathTo[newVertex]=edge;
+				for (Edge nextEdge : graph[newVertex]) {
+					int nextVertex = nextEdge.getOtherVertex(newVertex);
 					if(!visited[nextVertex]){
-						visited[vertex]=true;
+						//visited[vertex]=true;
 						int nextWeight = nextEdge.getWeight();
 						Edge existingMinEdge = minimumPathTo[nextVertex];
 						if(existingMinEdge.getWeight()>nextWeight){
