@@ -3,42 +3,40 @@ package hackerrank.algo.dynamic;
 import java.util.Scanner;
 
 public class StockMaximize {
-
-	public static void main(String args[]){
-		Scanner in = new Scanner(System.in);
-		int numOfTests = in.nextInt();
-		for (int testIndex = 0; testIndex < numOfTests; testIndex++) {
-			int numOfDays = in.nextInt();
-			int[] prices = new int[numOfDays];
-			for (int priceIndex = 0; priceIndex < numOfDays; priceIndex++) {
-				prices[priceIndex] = in.nextInt();
-			}
-			int[] actions = new int[numOfDays];
- 			findMaximumProfit(prices, 0, actions);
- 			int maxProfit = 0;
- 			int holdings = 0;
- 			for (int actionIndex = 0; actionIndex < actions.length; actionIndex++) {
- 				if(((actions[actionIndex]>=0) && actionIndex!=actions.length-1) || (actions[actionIndex]==0 && holdings==0)){
-					maxProfit = maxProfit - (prices[actionIndex]);
-					holdings++;
-				}else{
-					if(holdings>0){
-						maxProfit = maxProfit + prices[actionIndex]*holdings;
-						holdings=0;
-					}
+		public static void main(String args[]){
+			Scanner in = new Scanner(System.in);
+			int numOfTests = in.nextInt();
+			for (int testIndex = 0; testIndex < numOfTests; testIndex++) {
+				int numOfDays = in.nextInt();
+				long[] prices = new long[numOfDays+2];
+				for (int priceIndex = 1; priceIndex < numOfDays+1; priceIndex++) {
+					prices[priceIndex] = in.nextLong();
 				}
-			}
- 			System.out.println(maxProfit);
-		}
-	}
+				prices[0] = 0;
+				prices[prices.length-1] = 0;
+				long[] movementIndices = new long[numOfDays];
+				for (int i = 0; i < numOfDays; i++) {
+					movementIndices[i] = (prices[i+1] - prices[i])*(i);
+				}
+				
+				int stocksInHand = 0;
+				long highestSoFar = -1;
+				long profitMade = 0L;
+				for (int index = numOfDays-1; index >=0; index--) {
 
-	private static int findMaximumProfit(int[] prices, int index, int[] actions) {
-		if(index == prices.length-2){
-			actions[index] = (prices[index+1]-prices[index]);
-		}else{
-			actions[index] = ((prices[index+1]-prices[index])*prices[index]) + findMaximumProfit(prices, index+1, actions);
+						if(prices[index+1]>highestSoFar){
+							profitMade = profitMade + stocksInHand*highestSoFar;
+							highestSoFar = prices[index+1];
+							stocksInHand=0;
+						}else{
+							profitMade = profitMade - prices[index+1];
+							stocksInHand++;
+						}
+
+				}
+				profitMade = profitMade + stocksInHand*highestSoFar;
+				
+				System.out.println(profitMade);
+			}
 		}
-		return actions[index];
-	}
-	
 }
