@@ -1,35 +1,53 @@
 package hackerrank.algo.search;
 
 import java.util.Scanner;
+import java.util.TreeSet;
 
 public class MaximizeSum {
-
-	public static void main(String args[]){
+	public static void main(String args[]) {
 		Scanner in = new Scanner(System.in);
-		
+
 		int numOfTests = in.nextInt();
-		
+
 		for (int testIndex = 0; testIndex < numOfTests; testIndex++) {
 			int length = in.nextInt();
-			int hero = in.nextInt();
+			long hero = in.nextLong();
 			int[] array = new int[length];
-			
+
 			for (int index = 0; index < length; index++) {
 				array[index] = in.nextInt();
 			}
-			
-			int[] modulusArray = new int[length];
-			
-			modulusArray[0] = array[0]%hero;
-			int max = modulusArray[0];
-			for (int i = 1; i < array.length; i++) {
-				modulusArray[i] = (modulusArray[i-1]+array[i])%hero;
-				if(modulusArray[i]>max){
-					max = modulusArray[i];
-				}
-			}
-			System.out.println(max);
+
+			System.out.println(findMaximum(array, hero));
 		}
 	}
-	
+
+	private static long findMaximum(int[] array, long hero) {
+		
+		long max = 0;
+		long diff = hero;
+		TreeSet<Long> offsetIndices = new TreeSet<Long>();
+		long offsetIndex = 0;
+		
+		for (int index = 0; index < array.length; index++) {
+			
+			offsetIndex = (offsetIndex + array[index])%hero;
+			
+			Long prevOffset = offsetIndices.higher(offsetIndex);
+			if(prevOffset!=null){
+				if(prevOffset-offsetIndex<diff){
+					diff = prevOffset-offsetIndex;
+				}
+			}
+
+			if(offsetIndex>max){
+				max = offsetIndex;
+			}
+			offsetIndices.add(offsetIndex);
+		}
+		
+		
+		return Math.max(max, (hero-diff));
+		
+	}
 }
