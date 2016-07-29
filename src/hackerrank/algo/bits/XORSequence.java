@@ -1,5 +1,6 @@
 package hackerrank.algo.bits;
 
+import java.math.BigInteger;
 import java.util.Scanner;
 
 public class XORSequence {
@@ -15,29 +16,41 @@ public class XORSequence {
     }
 
 	private static void findXORDiff(long lower, long upper) {
-		long xor = 0 ;
-		for (long i = lower; i <= upper; i++) {
-			xor = xor ^ getXor(i);
+		BigInteger xor = BigInteger.ZERO;
+		long lowerFourOffset = (4-((lower)%4))%4;
+		long upperFourOffset = (upper)%4;
+
+		long lowerFour = lower + lowerFourOffset;
+		long upperFour = upper - upperFourOffset;
+		
+		for (long i = 0; i < lowerFourOffset; i++) {
+			//xor = xor ^ findXor(lower+i);
+			xor = xor.xor(findXor(BigInteger.valueOf(lower+i)));
 		}
+		for (long i = 0; i < upperFourOffset+1; i++) {
+			//xor = xor ^ findXor(upper-i);
+			xor = xor.xor(findXor(BigInteger.valueOf(upper-i)));
+		}
+		
+		if(!(((upperFour-lowerFour)/2)%4==0)){
+			xor = xor.xor(BigInteger.valueOf(2L));
+		}
+		
 		System.out.println(xor);
 	}
 
-	private static long getXor(long i) {
-		int modulus = (int)i%4;
-		
-		switch (modulus) {
-		case 0:
-			return i;
+	private static BigInteger findXor(BigInteger index) {
+		switch (Integer.valueOf(index.mod(BigInteger.valueOf(4)).toString())) {
 		case 1:
-			return 1;
+			return BigInteger.ONE;
 		case 2:
-			return i + 1;
-		case 3:
-			return 0;
+			return index.divide(BigInteger.valueOf(4)).add(BigInteger.ONE).multiply(BigInteger.valueOf(4)).subtract(BigInteger.ONE);
+		case 3: 
+			return BigInteger.ZERO;
 		default:
-			break;
+			return index;
 		}
-		return 0;
 	}
+
 	
 }
