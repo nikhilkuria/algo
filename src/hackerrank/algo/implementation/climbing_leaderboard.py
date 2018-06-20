@@ -30,19 +30,25 @@ def climbingLeaderboard_with_cache(scores, alice):
     return positions
 
 
-def climibingLeaderboard(scores, alice):
+def climbingLeaderboard(scores, alice):
     positions = []
     unique_scores = set(scores)
-    sorted_scores = sorted(unique_scores, reverse=True)
-    alice_scores = sorted(alice, reverse=True)
+    sorted_scores = sorted(unique_scores)
+    alice_scores = sorted(alice)
 
     start = 0
+    position = len(sorted_scores) + 1
     for alice_score in alice_scores:
-        position = len(unique_scores)
-        for score in unique_scores[start:]:
-            if alice_score < score:
+        for score in sorted_scores[start:]:
+            if alice_score >= score:
                 position = position - 1
-            #else:
+                start = start + 1
+                continue
+            break
+        positions.append(position)
+
+    return sorted(positions, reverse=True)
+
 
 
 
