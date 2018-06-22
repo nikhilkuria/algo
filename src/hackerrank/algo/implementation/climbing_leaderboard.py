@@ -32,28 +32,26 @@ def climbingLeaderboard_with_cache(scores, alice):
 
 def climbingLeaderboard(scores, alice):
     positions = []
-    unique_scores = set(scores)
-    sorted_scores = sorted(unique_scores)
-    alice_scores = sorted(alice)
-
+    unique_scores = sorted(set(scores))
+    print(unique_scores)
     start = 0
-    position = len(sorted_scores) + 1
-    for alice_score in alice_scores:
-        for score in sorted_scores[start:]:
-            if alice_score >= score:
+    for alice_score in alice:
+        position = len(unique_scores) + 1 - start
+        print("Starting at ", start)
+        for score in unique_scores[start:]:
+            print("Initial Position : ", position)
+            print("Comparing ", alice_score, " to ", score)
+            if alice_score > score:
                 position = position - 1
                 start = start + 1
                 continue
+            if alice_score == score:
+                position = position - 1
+                break
             break
         positions.append(position)
 
-    return sorted(positions, reverse=True)
-
-
-
-
-
-
+    return positions
 
 if __name__ == '__main__':
     scores_count = int(input())
